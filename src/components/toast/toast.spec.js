@@ -3,16 +3,12 @@ describe('$materialToast service', function() {
   }));
 
   function setup(options) {
-    var hideToast;
     inject(function($materialToast, $rootScope, $animate) {
       options = options || {};
-      $materialToast(options).then(function(fn) {
-        hideToast = fn;
-      });
+      $materialToast.show(options);
       $rootScope.$apply();
       $animate.triggerCallbacks();
     });
-    return hideToast;
   }
 
   describe('options', function() {
@@ -20,7 +16,7 @@ describe('$materialToast service', function() {
     it('should hide after duration', inject(function($timeout, $animate, $rootElement) {
       var parent = angular.element('<div>');
       setup({
-        template: '<material-toast>',
+        template: '<material-toast />',
         duration: 1234
       });
       expect($rootElement.find('material-toast').length).toBe(1);
