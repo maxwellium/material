@@ -5,7 +5,8 @@
 angular.module('material.components.dialog', [
   'material.animations',
   'material.services.compiler',
-  'material.services.aria'
+  'material.services.aria',
+  'material.services.interimElement',
 ])
   .directive('materialDialog', [
     '$$rAF',
@@ -19,6 +20,7 @@ angular.module('material.components.dialog', [
     '$materialEffects',
     '$animate',
     '$aria',
+    '$$interimElementFactory',
     MaterialDialogService
   ]);
 
@@ -104,28 +106,32 @@ function MaterialDialogDirective($$rAF) {
  * @param {element=} appendTo The element to append the dialog to. Defaults to appending
  *   to the root element of the application.
  */
-function MaterialDialogService($timeout, $materialCompiler, $rootElement, $rootScope, $materialEffects, $animate, $aria) {
-  var recentDialog;
-  var dialogParent = $rootElement.find('body');
-  if ( !dialogParent.length ) {
-    dialogParent = $rootElement;
+
+function MaterialDialogService($timeout, $materialEffects, $animate, $aria, $$interimElementFactory) {
+  var factoryDef = {
+    isolateScope: true,
+    onShow: onShow,
+    onHide: onHide,
+    clickOutsideToClose: true,
+    escapeToClose: true,
+    targetEvent: null,
+    transformTemplate: function(template) {
+      return '<div class="material-dialog-container">' + template + '</div>';
+    }
+  };
+
+  return $$interimElementFactory(factoryDef);
+
+  function onShow(scope, el, options) {
+    // Incase the user provides a raw dom element, always wrap it in jqLite
+    options.appendTo = angular.element(options.appendTo); 
   }
 
-  return showDialog;
+  function onHide(scope, el, options) {
+  }
+
 
   function showDialog(options) {
-    options = angular.extend({
-      appendTo: dialogParent,
-      hasBackdrop: true, // should have an opaque backdrop
-      clickOutsideToClose: true, // should have a clickable backdrop to close
-      escapeToClose: true,
-      // targetEvent: used to find the location to start the dialog from
-      targetEvent: null,
-      transformTemplate: function(template) {
-        return '<div class="material-dialog-container">' + template + '</div>';
-      }
-      // Also supports all options from $materialCompiler.compile
-    }, options || {});
 
     // Incase the user provides a raw dom element, always wrap it in jqLite
     options.appendTo = angular.element(options.appendTo); 
