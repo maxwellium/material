@@ -12,6 +12,7 @@ angular.module('material.services.interimElement', [
   '$rootScope',
   '$timeout',
   '$rootElement',
+  '$animate',
   '$materialCompiler',
   InterimElementFactory
 ]);
@@ -39,7 +40,7 @@ angular.module('material.services.interimElement', [
  *
  */
 
-function InterimElementFactory($q, $rootScope, $timeout, $rootElement, $materialCompiler) {
+function InterimElementFactory($q, $rootScope, $timeout, $rootElement, $animate, $materialCompiler) {
 
   return createInterimElement;
 
@@ -158,11 +159,16 @@ function InterimElementFactory($q, $rootScope, $timeout, $rootElement, $material
 
     function destroy() {
       var finish = $q.defer();
+      if(!deferred) {
+        // Already cleaned up, just return
+        finish.resolve();
+        return finish.promise;
+      }
       deferred = undefined;
       if(hideTimeout) {
         $timeout.cancel(hideTimeout);
         hideTimeout = undefined;
-      }
+      } 
 
       var ret = lastOptions.onHide(lastOptions.scope, currentEl, lastOptions);
       return $q.when(ret).then(function() {
