@@ -17,7 +17,7 @@ describe('$materialToast service', function() {
       var parent = angular.element('<div>');
       setup({
         template: '<material-toast />',
-        duration: 1234
+        hideTimeout: 1234
       });
       expect($rootElement.find('material-toast').length).toBe(1);
       $timeout.flush();
