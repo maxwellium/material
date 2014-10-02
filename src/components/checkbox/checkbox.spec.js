@@ -4,6 +4,7 @@ describe('materialCheckbox', function() {
 
   beforeEach(module('material.components.checkbox'));
   beforeEach(module('ngAria'));
+  beforeEach(TestUtil.mockRaf);
 
   it('should set checked css class and aria-checked attributes', inject(function($compile, $rootScope) {
     var element = $compile('<div>' +

@@ -76,7 +76,7 @@ function MaterialCheckboxDirective(inputDirectives, $materialInkRipple, $materia
     tAttrs.tabIndex = 0;
     tElement.attr('role', tAttrs.type);
 
-    $materialAria.expect(tElement, 'aria-label', tElement.text());
+    $materialAria.expect(tElement, 'aria-label');
 
     return function postLink(scope, element, attr, ngModelCtrl) {
       var checked = false;

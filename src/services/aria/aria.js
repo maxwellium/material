@@ -1,16 +1,17 @@
 angular.module('material.services.aria', [])
 
 .service('$materialAria', [
+  '$$rAF',
   '$log',
   AriaService
 ]);
 
-function AriaService($log) {
-  var messageTemplate = 'ARIA: Attribute "%s", required for accessibility, is missing on "%s"!';
+function AriaService($$rAF, $log) {
+  var messageTemplate = 'ARIA: Attribute "%s", required for accessibility, is missing on "%s"';
   var defaultValueTemplate = 'Default value was set: %s="%s".';
 
   return {
-    expect : expectAttribute,
+    expect : $$rAF.debounce(expectAttribute),
   };
 
   /**
@@ -23,7 +24,11 @@ function AriaService($log) {
 
     var node = element[0];
     if (!node.hasAttribute(attrName)) {
-      var hasDefault = angular.isDefined(defaultValue);
+
+      if(!defaultValue){
+        defaultValue = element.text().trim();
+      }
+      var hasDefault = angular.isDefined(defaultValue) && defaultValue.length;
 
       if (hasDefault) {
         defaultValue = String(defaultValue).trim();
@@ -31,7 +36,8 @@ function AriaService($log) {
         //           attrName, getTagString(node), attrName, defaultValue);
         element.attr(attrName, defaultValue);
       } else {
-        // $log.warn(messageTemplate, attrName, getTagString(node));
+        $log.warn(messageTemplate, attrName, getTagString(node));
+        $log.warn(node);
       }
     }
   }

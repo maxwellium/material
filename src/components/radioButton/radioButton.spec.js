@@ -1,6 +1,7 @@
 describe('radioButton', function() {
   var CHECKED_CSS = 'material-checked';
 
+  beforeEach(TestUtil.mockRaf);
   beforeEach(module('material.components.radioButton'));
 
   it('should set checked css class', inject(function($compile, $rootScope) {
