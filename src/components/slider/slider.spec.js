@@ -12,7 +12,7 @@ describe('material-slider', function() {
     };
   }
 
-  // beforeEach(TestUtil.mockRaf);
+  beforeEach(TestUtil.mockRaf);
   beforeEach(module('ngAria'));
   beforeEach(module('material.components.slider','material.decorators'));
 
@@ -95,7 +95,7 @@ describe('material-slider', function() {
     expect($rootScope.model).toBe(100);
   }));
 
-  xit('should warn developers they need a label', inject(function($compile, $rootScope, $timeout, $log) {
+  it('should warn developers they need a label', inject(function($compile, $rootScope, $timeout, $log) {
     spyOn($log, "warn");
 
     var slider = $compile(
