@@ -12,6 +12,8 @@ describe('material-slider', function() {
     };
   }
 
+  // beforeEach(TestUtil.mockRaf);
+  beforeEach(module('ngAria'));
   beforeEach(module('material.components.slider','material.decorators'));
 
   it('should set model on press', inject(function($compile, $rootScope, $timeout) {
@@ -93,4 +95,13 @@ describe('material-slider', function() {
     expect($rootScope.model).toBe(100);
   }));
 
+  xit('should warn developers they need a label', inject(function($compile, $rootScope, $timeout, $log) {
+    spyOn($log, "warn");
+
+    var slider = $compile(
+      '<material-slider min="100" max="104" step="2" ng-model="model">'
+    )($rootScope);
+
+    expect($log.warn).toHaveBeenCalled();
+  }));
 });

@@ -32,8 +32,6 @@ function AriaService($$rAF, $log) {
 
       if (hasDefault) {
         defaultValue = String(defaultValue).trim();
-        // $log.warn(messageTemplate + ' ' + defaultValueTemplate,
-        //           attrName, getTagString(node), attrName, defaultValue);
         element.attr(attrName, defaultValue);
       } else {
         $log.warn(messageTemplate, attrName, getTagString(node));
